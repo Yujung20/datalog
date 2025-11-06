@@ -13,3 +13,9 @@ venv/
 # OS / IDE
 .DS_Store
 .idea/
+
+manage.py
+asgi.py
+wsgi.py
+__init__.py
+settings.py
