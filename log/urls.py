@@ -9,6 +9,8 @@ urlpatterns = [
     path("log_gen_i/", views.log_gen_i, name = "log_gen_i"),
     path("btn_gen_i_click/<int:product_id>",views.btn_gen_i_click, name="btn_gen_i_click" ),
     path("log_gen_ii/", views.log_gen_ii, name="log_gen_ii"),  #-->{% url "log_app:log_gen_ii" %}
-    path("btn_gen_ii_click/", views.btn_gen_ii_click, name="btn_gen_ii_click")
+    path("btn_gen_ii_click/", views.btn_gen_ii_click, name="btn_gen_ii_click"),
+    path("btn_gen_iii_click/", views.btn_gen_iii_click, name="btn_gen_iii_click")
+
 ]
 

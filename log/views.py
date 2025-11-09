@@ -120,3 +120,37 @@ def btn_gen_ii_click(request):
 
     return render(request, "log_gen_ii.html")
 
+def btn_gen_iii_click(request):
+    # 자동로그 app log 생성하기
+    # 호텔 예약을 위한 로그 파일 생성재료
+    user_pool = ["ace", "phdmk", "keras", "tensor", "pytorch", "gogo", "alice", "korea"]
+    service_pool = ["일정보기", "호텔예약", "둘러보기", "예약문의", "예약해지", "상담연결", "추천하기"]
+    stars = [1, 2, 3, 4, 5]
+    access_type = ["web", "android", "ios"]
+
+    logs = []
+    current_time = datetime.datetime.now()
+    time = current_time.strftime("%Y-%m-%d %H:%M:%S")
+
+    if request.method == "POST":
+        loop_count = int(request.POST["numlog"])
+
+        for i in range(loop_count):
+            log_data = {"time": time,
+                        "user_id": user_pool[random.randint(0, len(user_pool) - 1)],
+                        "service_menu": service_pool[random.randint(0, len(service_pool) - 1)],
+                        "stars": str(stars[random.randint(0, len(stars) - 1)]),
+                        "access_type": access_type[random.randint(0, len(access_type) - 1)],
+                        "isReservation": str(random.randint(0, 1))}
+            logs.append(log_data)
+
+        # dict -> str : json.dumps()
+        with open("resv_log.log", "a+", encoding="utf-8") as fd:
+            for log in logs:
+                fd.write(json.dumps(log, ensure_ascii=False) + "\n")  # 한 줄씩 JSON 문자열로 저장 (ensure_ascii=False --> 한글안깨짐)
+
+        context = {
+            "logs": logs
+        }
+        return render(request, "log_gen_iii.html", context)
+    return render(request, "log_gen_iii.html")
