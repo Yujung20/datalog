@@ -18,6 +18,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = BASE_DIR/"templates"
 
 
+import environ
+env = environ.Env()
+env.read_env(os.path.join(BASE_DIR, ".env"))
+
+USE_AWS_DB = env.bool("USE_AWS_DB",default = False)
+print("Settings:",USE_AWS_DB)
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -34,6 +42,7 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     "log",
+    "ajaxapp",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -77,12 +86,36 @@ WSGI_APPLICATION = "conf.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+if USE_AWS_DB:
+    DATABASES = {
+        "default":{
+            "ENGINE":"django.db.backends.mysql",
+            "NAME": env("AWS_DB_NAME"),
+            "USER": env("AWS_DB_USER"),
+            "PASSWORD": env("AWS_DB_PASSWORD"),
+            "HOST": env("AWS_DB_HOST"),
+            "PORT": env("AWS_DB_PORT"),
+            "OPTIONS":{
+              "charset":"utf8mb4",
+            },
+        }
     }
-}
+
+else :
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": "lgu8-master",
+            "USER": "root",
+            "PASSWORD": "root",
+            "HOST": "127.0.0.1",
+            "PORT": "3306",
+            "OPTIONS": {
+                "charset": "utf8mb4",
+            },
+        }
+    }
+
 
 
 # Password validation
@@ -127,3 +160,5 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+

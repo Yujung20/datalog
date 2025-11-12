@@ -23,4 +23,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('',index),
     path('applog/',include('log.urls')),
+    path('ajax/',include('ajaxapp.urls')),
 ]
