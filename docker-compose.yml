@@ -1,0 +1,30 @@
+version: '3.8'
+volumes:
+  django_media: {}
+  django_static: {}
+services:
+  backend:
+    container_name: backend
+    build: ./mylog/
+    entrypoint: sh -c "python manage.py collectstatic --no-input && python manage.py migrate && gunicorn conf.wsgi --workers=5 -b 0.0.0.0:8000"
+    volumes:
+      - ./mylog/:/app/
+      - /etc/localtime:/etc/localtime:ro
+      - django_media:/app/media/ # nginx에서 media를 사용할 수 있도록 volume을 지정해줍니다.
+      - django_static:/app/static/ # nginx에서 static을 사용할 수 있도록 volume을 지정해줍니다.
+    environment: # django에서 사용할 설정들을 지정해줍니다.
+      - DEBUG
+    restart: always
+  nginx:
+    container_name : nginx
+    image: nginx:1.23.2
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - django_media:/media/ # django의 media를 사용할 수 있도록 volume을 지정해줍니다.
+      - django_static:/static/ # django의 static 사용할 수 있도록 volume을 지정해줍니다.
+    depends_on:
+      - backend
+    restart: always
