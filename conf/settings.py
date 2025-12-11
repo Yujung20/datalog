@@ -87,7 +87,12 @@ WSGI_APPLICATION = "conf.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# ─────────────────────────────────────
+# DB 설정
+# ─────────────────────────────────────
+
 if USE_AWS_DB:
+    # 🔸 나중에 RDS(MySQL) 쓸 때 사용할 설정 (지금은 안 써도 됨)
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
@@ -101,19 +106,12 @@ if USE_AWS_DB:
             },
         }
     }
-
 else:
+    # 🔹 현재 EB 배포 연습용: SQLite 사용 (별도 DB 서버 필요 없음)
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.mysql",
-            "NAME": "lgu8-master",
-            "USER": "root",
-            "PASSWORD": "root",
-            "HOST": "127.0.0.1",
-            "PORT": "3306",
-            "OPTIONS": {
-                "charset": "utf8mb4",
-            },
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
     }
 
