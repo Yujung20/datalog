@@ -9,7 +9,7 @@ django-request==1.7.1
 idna==3.11
 lxml==6.0.2
 mysql-connector-python==9.4.0
-mysqlclient==2.2.7
+pymysql
 python-dateutil==2.9.0.post0
 requests==2.32.5
 six==1.17.0
