@@ -15,15 +15,16 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-TEMPLATES_DIR = BASE_DIR/"templates"
+TEMPLATES_DIR = BASE_DIR / "templates"
 
 
 import environ
+
 env = environ.Env()
 env.read_env(os.path.join(BASE_DIR, ".env"))
 
-USE_AWS_DB = env.bool("USE_AWS_DB",default = False)
-print("Settings:",USE_AWS_DB)
+USE_AWS_DB = env.bool("USE_AWS_DB", default=False)
+print("Settings:", USE_AWS_DB)
 
 
 # Quick-start development settings - unsuitable for production
@@ -66,7 +67,6 @@ ROOT_URLCONF = "conf.urls"
 
 TEMPLATES = [
     {
-
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [TEMPLATES_DIR],
         "APP_DIRS": True,
@@ -89,20 +89,20 @@ WSGI_APPLICATION = "conf.wsgi.application"
 
 if USE_AWS_DB:
     DATABASES = {
-        "default":{
-            "ENGINE":"django.db.backends.mysql",
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
             "NAME": env("AWS_DB_NAME"),
             "USER": env("AWS_DB_USER"),
             "PASSWORD": env("AWS_DB_PASSWORD"),
             "HOST": env("AWS_DB_HOST"),
             "PORT": env("AWS_DB_PORT"),
-            "OPTIONS":{
-              "charset":"utf8mb4",
+            "OPTIONS": {
+                "charset": "utf8mb4",
             },
         }
     }
 
-else :
+else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
@@ -116,7 +116,6 @@ else :
             },
         }
     }
-
 
 
 # Password validation
@@ -161,5 +160,3 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-
