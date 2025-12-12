@@ -10,45 +10,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1) 코드 가져오기
       - name: Checkout source code
         uses: actions/checkout@v4
 
-      # 2) Python 3.9 세팅
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.9"
 
-      # 3) 의존성 설치 (리포 루트에서 실행)
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # 4) 배포용 zip 생성 (리포 루트 전체를 묶기)
+      - name: Collect static files
+        run: |
+          python manage.py collectstatic --noinput
+
       - name: Build deployment package
         run: |
+          ls -R
           zip -r deploy.zip . \
-            -x "*.git*" ".github/*" "*.idea*" "*__pycache__*" "*.pytest_cache*" \
-               ".env" "log/*" "lambda_function.py"
+            -x "*.git*" ".github/*" ".github" \
+               "*__pycache__*" "*.pytest_cache*" \
+               "venv/*" ".venv/*"
 
-      # 5) AWS 자격증명 설정 (GitHub Secrets 사용)
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
 
-      # 6) Elastic Beanstalk로 배포
+      # ⚠️ Configure AWS credentials 스텝은 삭제
+
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
         with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: ${{ secrets.EB_APPLICATION_NAME }}
-          environment_name: ${{ secrets.EB_ENVIRONMENT_NAME }}
+          application_name: ${{ secrets.EB_APP_NAME }}
+          environment_name: ${{ secrets.EB_ENV_NAME }}
           version_label: v-${{ github.run_number }}
           region: ${{ secrets.AWS_REGION }}
           deployment_package: deploy.zip
+          wait_for_deployment: true
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
