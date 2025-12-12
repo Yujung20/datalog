@@ -34,7 +34,7 @@ print("Settings:", USE_AWS_DB)
 SECRET_KEY = "django-insecure-e#&$ej(wefly1tnr@rur*-hpsajow4%q7%srg&dg)$s@4c%9q4"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
