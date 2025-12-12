@@ -42,7 +42,8 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    "log.apps.LogConfig",
+    # "log.apps.LogConfig",
+    "log",
     "ajaxapp",
     "django.contrib.admin",
     "django.contrib.auth",
