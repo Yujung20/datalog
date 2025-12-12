@@ -23,6 +23,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Collect static files
+        run: |
+          python manage.py collectstatic --noinput
+
       - name: Build deployment package
         run: |
           ls -R
@@ -30,6 +34,7 @@ jobs:
             -x "*.git*" ".github/*" ".github" \
                "*__pycache__*" "*.pytest_cache*" \
                "venv/*" ".venv/*"
+
 
       # ⚠️ Configure AWS credentials 스텝은 삭제
 
